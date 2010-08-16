@@ -11,3 +11,12 @@ Feature: Generating html from jpgs
     When I cd to "foo"
     When I run phboot
     Then the output should contain "go shoot some photos!"
+
+  Scenario: images in directory
+    Given a directory named "baz"
+    And an empty file named "baz/louie01.jpg"
+    And an empty file named "baz/louie02.jpg"
+    When I cd to "baz"
+    And I run phboot
+    Then the output should contain "generating html..."
+    And the file "index.html" should exist
