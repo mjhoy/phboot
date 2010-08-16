@@ -7,6 +7,7 @@ Feature: Generating html from jpgs
   generates the html necessary to view them.
 
   Scenario: empty directory
-    Given I am in an empty directory
-    When I try to phboot it
-    Then I should see "Take some photos!"
+    Given a directory named "foo"
+    When I cd to "foo"
+    When I run phboot
+    Then the output should contain "go shoot some photos!"
