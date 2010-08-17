@@ -6,16 +6,29 @@ Feature: Generating html from jpgs
   I want a script takes a directory of images and
   generates the html necessary to view them.
 
+  Background:
+    Given a directory named "baz"
+    And an empty file named "baz/louie01.jpg"
+    And an empty file named "baz/louie02.jpg"
+
   Scenario: empty directory
     Given a directory named "foo"
     When I run phboot with "foo"
     Then the output should contain "go shoot some photos!"
 
+  @wip
   Scenario: images in directory
-    Given a directory named "baz"
-    And an empty file named "baz/louie01.jpg"
-    And an empty file named "baz/louie02.jpg"
     When I run phboot with "baz"
     Then the output should contain "generating html..."
     And the following files should exist:
      |index.html|
+     |images/louie01.jpg|
+     |images/louie02.jpg|
+
+  Scenario: Conflicting files
+    Given an empty file named "index.html"
+    When I run phboot with "baz"
+    Then the output should contain "index.html exists. Use -f to force"
+    And the following files should not exist:
+      |images/louie01.jpg|
+      |images/louie02.jpg|
