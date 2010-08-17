@@ -8,15 +8,14 @@ Feature: Generating html from jpgs
 
   Scenario: empty directory
     Given a directory named "foo"
-    When I cd to "foo"
-    When I run phboot
+    When I run phboot with "foo"
     Then the output should contain "go shoot some photos!"
 
   Scenario: images in directory
     Given a directory named "baz"
     And an empty file named "baz/louie01.jpg"
     And an empty file named "baz/louie02.jpg"
-    When I cd to "baz"
-    And I run phboot
+    When I run phboot with "baz"
     Then the output should contain "generating html..."
-    And the file "index.html" should exist
+    And the following files should exist:
+     |index.html|
