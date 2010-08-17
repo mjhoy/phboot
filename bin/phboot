@@ -28,9 +28,7 @@
 
 
 # TO DO - replace all ruby_cl_skeleton with your app name
-# TO DO - replace all YourName with your actual name
 # TO DO - update Synopsis, Examples, etc
-# TO DO - change license if necessary
 
 
 
@@ -131,9 +129,23 @@ class App
     end
     
     def process_command
-      # TO DO - do whatever this app does
-      
-      #process_standard_input # [Optional]
+      puts 'generating html...' 
+      images = []
+      Dir.foreach( @arguments[0] ) do |path|
+        if path.match /\.jpg$/
+          images << path
+        end
+      end
+      if images.length == 0
+        puts "go shoot some photos!"
+        exit 0
+      end
+      unless File.exist? "index.html"
+        File.open("index.html", "w") { |f| f.write("Hello!") }
+      else
+        puts "index.html already exists."
+        exit 0
+      end
     end
 
     def process_standard_input
