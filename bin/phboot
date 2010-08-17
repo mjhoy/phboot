@@ -20,8 +20,8 @@
 #   -v, --version       Display the version, then exit
 #   -q, --quiet         Output as little as possible, overrides verbose
 #   -V, --verbose       Verbose output
+#   -f, --force         Force overwrite of existing files
 #
-#   --galleria          Generate HTML that uses jQuery and galleria javascript libraries
 #
 # == Author
 #   mjhoy
@@ -80,10 +80,14 @@ class App
       
       # Specify options
       opts = OptionParser.new 
+
+      opts.banner = "Usage: phboot [options] source_dir [dest_dir=pwd]"
+
       opts.on('-v', '--version')    { output_version ; exit 0 }
       opts.on('-h', '--help')       { output_help }
       opts.on('-V', '--verbose')    { @options.verbose = true }  
       opts.on('-q', '--quiet')      { @options.quiet = true }
+      opts.on('-f', '--force')      { @options.force = true }
       # TO DO - add additional options
             
       opts.parse!(@arguments) rescue return false
