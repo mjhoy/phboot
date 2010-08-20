@@ -21,14 +21,14 @@ Feature: Generating html from jpgs
     When I run phboot with "baz"
     Then the output should contain "generating html..."
     And the following files should exist:
-     |index.html|
-     |images/louie01.jpg|
-     |images/louie02.jpg|
+     |baz/phboot/index.html|
+     |baz/phboot/images/louie01.jpg|
+     |baz/phboot/images/louie02.jpg|
 
   Scenario: Conflicting files
-    Given an empty file named "index.html"
+    Given an empty file named "baz/phboot/index.html"
     When I run phboot with "baz"
-    Then the output should contain "index.html exists. Use -f to force"
+    Then the output should contain "phboot/index.html exists. Use -f to force"
     And the following files should not exist:
-      |images/louie01.jpg|
-      |images/louie02.jpg|
+      |baz/phboot/images/louie01.jpg|
+      |baz/phboot/images/louie02.jpg|
