@@ -1,4 +1,4 @@
-Feature: Generating html from jpgs
+Feature: Command line
 
   In order to put photos online very easily and
   in the way I want them,
