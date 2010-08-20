@@ -16,7 +16,6 @@ Feature: Generating html from jpgs
     When I run phboot with "foo"
     Then the output should contain "go shoot some photos!"
 
-  @wip
   Scenario: images in directory
     When I run phboot with "baz"
     Then the output should contain "generating html..."
@@ -32,3 +31,12 @@ Feature: Generating html from jpgs
     And the following files should not exist:
       |baz/phboot/images/louie01.jpg|
       |baz/phboot/images/louie02.jpg|
+
+  @wip
+  Scenario: Dest directory
+    Given a directory named "foo"
+    When I run phboot with "baz foo"
+    Then the following files should exist:
+      |foo/index.html|
+      |foo/images/louie01.jpg|
+      |foo/images/louie02.jpg|
