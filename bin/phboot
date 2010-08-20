@@ -143,8 +143,14 @@ class App
     
     def process_command
       puts 'generating html...' 
+      begin
       phboot = Phboot::Base.new(@source_dir)
       phboot.generate(@dest_dir)
+      rescue NoPhotosError
+        abort "go shoot some photos!"
+      rescue FileExistsError 
+        abort "phboot/index.html exists. Use -f to force"
+      end
     end
 
     def process_standard_input
@@ -158,9 +164,14 @@ class App
     end
 end
 
+class NoPhotosError < RuntimeError; end;
+class FileExistsError < RuntimeError; end;
+
 module Phboot
   class Base
-    def initialize(source_dir)
+    attr_accessor :force, :verbose, :source_dir
+
+    def source_dir=(source_dir)
       @source_dir = source_dir
       @images = []
       Dir.foreach( @source_dir ) do |path|
@@ -169,8 +180,12 @@ module Phboot
         end
       end
       if @images.length == 0
-        abort "go shoot some photos!"
+        raise NoPhotosError 
       end
+    end
+      
+    def initialize(s_dir = nil)
+      self.source_dir = s_dir if s_dir
     end
 
     
@@ -186,8 +201,7 @@ module Phboot
         end
         File.open("#{root}/index.html", "w") { |f| f.write("Hello!") }
       else
-        puts "phboot/index.html exists. Use -f to force"
-        exit 0
+        raise FileExistsError unless self.force
       end
     end
   end
