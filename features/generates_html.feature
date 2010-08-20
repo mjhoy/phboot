@@ -32,7 +32,6 @@ Feature: Generating html from jpgs
       |baz/phboot/images/louie01.jpg|
       |baz/phboot/images/louie02.jpg|
 
-  @wip
   Scenario: Dest directory
     Given a directory named "foo"
     When I run phboot with "baz foo"
@@ -40,3 +39,13 @@ Feature: Generating html from jpgs
       |foo/index.html|
       |foo/images/louie01.jpg|
       |foo/images/louie02.jpg|
+
+  @wip
+  Scenario: Nonexistant source
+    When I run phboot with "notadir"
+    Then the output should contain "notadir: No such directory"
+
+  @wip
+  Scenario: Nonexistant dest
+    When I run phboot with "baz notadir"
+    Then the output should contain "notadir: No such directory"

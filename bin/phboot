@@ -118,8 +118,10 @@ class App
     # Setup the arguments
     def process_arguments
       @source_dir = @arguments[0].chomp("/") # remove trailing slash
+      abort "#{@source_dir}: No such directory" unless File.directory? @source_dir 
       if @arguments[1]
         @dest_dir = @arguments[1].chomp("/")
+        abort "#{@dest_dir}: No such directory" unless File.directory? @dest_dir
       else
         @dest_dir = @source_dir + "/phboot"
         Dir.mkdir( @dest_dir ) unless File.exist?( @dest_dir )
@@ -148,8 +150,7 @@ class App
         end
       end
       if images.length == 0
-        puts "go shoot some photos!"
-        exit 0
+        abort "go shoot some photos!"
       end
       root = @dest_dir
       image_root = root + "/images"
