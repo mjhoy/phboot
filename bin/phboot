@@ -117,6 +117,8 @@ class App
     
     # Setup the arguments
     def process_arguments
+      @source_dir = @arguments[0].chomp("/") # remove trailing slash
+      @dest_dir = @source_dir #TODO change
     end
     
     def output_help
@@ -135,7 +137,7 @@ class App
     def process_command
       puts 'generating html...' 
       images = []
-      Dir.foreach( @arguments[0] ) do |path|
+      Dir.foreach( @source_dir ) do |path|
         if path.match /\.jpg$/
           images << path
         end
@@ -144,10 +146,18 @@ class App
         puts "go shoot some photos!"
         exit 0
       end
-      unless File.exist? "index.html"
-        File.open("index.html", "w") { |f| f.write("Hello!") }
+      root = "#{@source_dir}/phboot"
+      image_root = root + "/images"
+      unless File.exist?( root + "/index.html" )
+        Dir.mkdir( root ) unless File.exist?( root )
+        Dir.mkdir( image_root ) unless File.exist?( image_root )
+        images.each do |i|
+          %x{ cp #{ @source_dir + "/" + i } #{ image_root } }
+          # TODO: wow. figure out how to copy files in ruby that works in 1.9 and 1.8!
+        end
+        File.open("#{root}/index.html", "w") { |f| f.write("Hello!") }
       else
-        puts "index.html already exists."
+        puts "phboot/index.html exists. Use -f to force"
         exit 0
       end
     end
