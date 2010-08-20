@@ -118,7 +118,12 @@ class App
     # Setup the arguments
     def process_arguments
       @source_dir = @arguments[0].chomp("/") # remove trailing slash
-      @dest_dir = @source_dir #TODO change
+      if @arguments[1]
+        @dest_dir = @arguments[1].chomp("/")
+      else
+        @dest_dir = @source_dir + "/phboot"
+        Dir.mkdir( @dest_dir ) unless File.exist?( @dest_dir )
+      end
     end
     
     def output_help
@@ -146,7 +151,7 @@ class App
         puts "go shoot some photos!"
         exit 0
       end
-      root = "#{@source_dir}/phboot"
+      root = @dest_dir
       image_root = root + "/images"
       unless File.exist?( root + "/index.html" )
         Dir.mkdir( root ) unless File.exist?( root )
