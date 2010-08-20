@@ -143,29 +143,8 @@ class App
     
     def process_command
       puts 'generating html...' 
-      images = []
-      Dir.foreach( @source_dir ) do |path|
-        if path.match /\.jpg$/
-          images << path
-        end
-      end
-      if images.length == 0
-        abort "go shoot some photos!"
-      end
-      root = @dest_dir
-      image_root = root + "/images"
-      unless File.exist?( root + "/index.html" )
-        Dir.mkdir( root ) unless File.exist?( root )
-        Dir.mkdir( image_root ) unless File.exist?( image_root )
-        images.each do |i|
-          %x{ cp #{ @source_dir + "/" + i } #{ image_root } }
-          # TODO: wow. figure out how to copy files in ruby that works in 1.9 and 1.8!
-        end
-        File.open("#{root}/index.html", "w") { |f| f.write("Hello!") }
-      else
-        puts "phboot/index.html exists. Use -f to force"
-        exit 0
-      end
+      phboot = Phboot::Base.new(@source_dir)
+      phboot.generate(@dest_dir)
     end
 
     def process_standard_input
@@ -179,9 +158,40 @@ class App
     end
 end
 
+module Phboot
+  class Base
+    def initialize(source_dir)
+      @source_dir = source_dir
+      @images = []
+      Dir.foreach( @source_dir ) do |path|
+        if path.match /\.jpg$/
+          @images << path
+        end
+      end
+      if @images.length == 0
+        abort "go shoot some photos!"
+      end
+    end
 
-# TO DO - Add your Modules, Classes, etc
-
+    
+    def generate(dest_dir)
+      root = dest_dir
+      image_root = root + "/images"
+      unless File.exist?( root + "/index.html" )
+        Dir.mkdir( root ) unless File.exist?( root )
+        Dir.mkdir( image_root ) unless File.exist?( image_root )
+        @images.each do |i|
+          %x{ cp #{ @source_dir + "/" + i } #{ image_root } }
+          # TODO: yikes. figure out how to copy files in ruby that works in 1.9 and 1.8!
+        end
+        File.open("#{root}/index.html", "w") { |f| f.write("Hello!") }
+      else
+        puts "phboot/index.html exists. Use -f to force"
+        exit 0
+      end
+    end
+  end
+end
 
 # Create and run the application
 app = App.new(ARGV, STDIN)
