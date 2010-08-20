@@ -172,6 +172,7 @@ module Phboot
     attr_accessor :force, :verbose, :source_dir
 
     def source_dir=(source_dir)
+      # Generate image list
       @source_dir = source_dir
       @images = []
       Dir.foreach( @source_dir ) do |path|
@@ -187,7 +188,6 @@ module Phboot
     def initialize(s_dir = nil)
       self.source_dir = s_dir if s_dir
     end
-
     
     def generate(dest_dir)
       root = dest_dir
@@ -199,10 +199,23 @@ module Phboot
           %x{ cp #{ @source_dir + "/" + i } #{ image_root } }
           # TODO: yikes. figure out how to copy files in ruby that works in 1.9 and 1.8!
         end
-        File.open("#{root}/index.html", "w") { |f| f.write("Hello!") }
+        File.open("#{root}/index.html", "w") { |f| f.write( self.index ) }
       else
         raise FileExistsError unless self.force
       end
+    end
+
+    def index
+      <<-eos
+        <html>
+          <head>
+           <title>phboot!</title>
+          </head>
+          <body>
+          #{ @images.map { |i| "<a href='./images/" + i + "'>" + i + "</a>" }.join("<br/>") }
+          </body>
+        </html>
+      eos
     end
   end
 end
