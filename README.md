@@ -25,6 +25,10 @@ you up with the 'classic' theme. See http://github.com/aino/galleria
 
 ### install ###
 
+    mkdir -p ~/bin
     cd ~/bin
     wget http://github.com/mjhoy/phboot/raw/master/bin/phboot
     chmod +x phboot
+    cd -
+
+note, here, that `~/bin` should be in your $PATH.
